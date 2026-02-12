@@ -1,0 +1,340 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "private_outputs": true,
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "xQ5NGh98BYDo"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df=pd.read_csv(\"/content/Studentdata.csv\")"
+      ],
+      "metadata": {
+        "id": "Khx7imBeB3nz"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.head(10)"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "t4awVctzCg-j"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.describe()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "WgHSuQyhDQMc"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.info()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "FxHOytD4Dqg1"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.isnull().sum()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "xhiRo75jD5sc"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "##Drop unnamed column"
+      ],
+      "metadata": {
+        "id": "ylhOmcBIEJ7b"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df=df.drop(\"Unnamed: 0\", axis=1)\n",
+        "print(df.head())"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "_t4T2LUDENls"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "##Change weekly study hours column"
+      ],
+      "metadata": {
+        "id": "ObtTAQ82EyY_"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df[\"WklyStudyHours\"]=df[\"WklyStudyHours\"].str.replace(\"05-Oct\",\"5-10\")\n",
+        "df.head()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "awPtDCcKE4GF"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "##Gender distribution"
+      ],
+      "metadata": {
+        "id": "Qx3LXCRQGL6N"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.figure(figsize=(5,5))\n",
+        "ax=sns.countplot(data=df,x=\"Gender\")\n",
+        "ax.bar_label(ax.containers[0])\n",
+        "plt.title(\"Gender Distribution\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "bEmZeAYUFwu-"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "From the above chart we have analysed that: the number of female in the data is more than the number of female"
+      ],
+      "metadata": {
+        "id": "FUQEKADqGsFh"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "gb=df.groupby(\"ParentEduc\").agg({\"MathScore\":'mean',\"ReadingScore\":'mean',\"WritingScore\":'mean'})\n",
+        "print(gb)"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "eqRigR5BG962"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "plt.figure(figsize=(5,4))\n",
+        "sns.heatmap(gb,annot=True)\n",
+        "plt.title(\"Relationship Between Parent's Education And Student Score\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "WWknz0z_G56O"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "From the above chart we have concluded that the education of the parents have a good impact on their score"
+      ],
+      "metadata": {
+        "id": "__sBnUCFLCmm"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "gb1=df.groupby(\"ParentMaritalStatus\").agg({\"MathScore\":'mean',\"ReadingScore\":'mean',\"WritingScore\":'mean'})\n",
+        "print(gb1)"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "69CInQVPLPij"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.figure(figsize=(5,4))\n",
+        "sns.heatmap(gb1,annot=True)\n",
+        "plt.title(\"Relationship Between Parent's Marital Status And Student Score\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "027h72QsL1Ew"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "From the above chart we have concluded that there is no/negligible impact on the students score due to the parent marital status"
+      ],
+      "metadata": {
+        "id": "v22BhobhMJcq"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.boxplot(data=df,x=\"MathScore\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "Z2Vre9xEM0yC",
+        "collapsed": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.boxplot(data=df,x=\"ReadingScore\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "AmZA8M2HPjHd"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.boxplot(data=df,x=\"WritingScore\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "Sev2PVboPvS-"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(df[\"EthnicGroup\"].unique ())"
+      ],
+      "metadata": {
+        "id": "XR-B_X9cQk8r"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Distribution of Ethnic Group"
+      ],
+      "metadata": {
+        "id": "d_Nr_A8oTikf"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "groupA=df.loc[(df['EthnicGroup']==\"group A\")].count()\n",
+        "groupB=df.loc[(df['EthnicGroup']==\"group B\")].count()\n",
+        "groupC=df.loc[(df['EthnicGroup']==\"group C\")].count()\n",
+        "groupD=df.loc[(df['EthnicGroup']==\"group D\")].count()\n",
+        "groupE=df.loc[(df['EthnicGroup']==\"group E\")].count()\n",
+        "\n",
+        "l=[\"group A\",\"group B\",\"group C\",\"group D\",\"group E\"]\n",
+        "Mlist=[groupA[\"EthnicGroup\"],groupB[\"EthnicGroup\"],groupC[\"EthnicGroup\"],groupD[\"EthnicGroup\"],groupE[\"EthnicGroup\"]]\n",
+        "plt.pie(Mlist,labels=l,autopct=\"%.2f%%\")\n",
+        "plt.title(\"Distribution of Ethnic Groups\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "Mfr7scLfTqVD"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "ax=sns.countplot(data=df,x='EthnicGroup')\n",
+        "ax.bar_label(ax.containers[0])\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "_RBeAhSYY5gL"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
