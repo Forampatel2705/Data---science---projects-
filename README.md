@@ -1,26 +1,6 @@
-# Student Analysis Project
+# Data Science Projects
 
-## 📌 Overview
-This project analyzes student performance data using Python.
+This repository contains multiple data analysis projects:
 
-## 🛠 Tools Used
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-
-## 📊 Analysis Performed
-- Data Cleaning
-- Gender Distribution Analysis
-- Parent Education vs Scores
-- Parent Marital Status Impact
-- Ethnic Group Distribution
-- Score Distribution using Boxplots
-
-## 📁 Files
-- Project_1.ipynb
-- Studentdata.csv
-
-## 🚀 Conclusion
-The analysis shows that parental education has a positive impact on student performance, while marital status has minimal effect.
+1. Student Analysis
+2. Zomato Data Analysis
