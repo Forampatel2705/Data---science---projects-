@@ -1,0 +1,301 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "private_outputs": true,
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": [
+        "##Zomato data analysis"
+      ],
+      "metadata": {
+        "id": "jHjAn4pHT6F9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "5jd2JUKpRFR_"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df=pd.read_csv(\"Zomato_data.csv\")"
+      ],
+      "metadata": {
+        "id": "nPMOTN0vRdRT",
+        "collapsed": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "3FVuMNsoRlIk"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.info()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "bsCHRv20RsUv"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.isnull().sum()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "RmRvUevkRyim"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.describe()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "yqBpAePTR3O6"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#Convert the datatype of column-rate"
+      ],
+      "metadata": {
+        "id": "-QpAimuPWzTG"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def handale_rate(value):\n",
+        "    value=str(value).split('/')\n",
+        "    value=value[0]\n",
+        "    return float(value)\n",
+        "\n",
+        "df[\"rate\"]=df[\"rate\"].apply(handale_rate)\n",
+        "df.head()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "ocy6eJEsW5N6"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Type of Restaurant"
+      ],
+      "metadata": {
+        "id": "Sf8cxV0mYqjb"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.countplot(data=df,x=\"listed_in(type)\")\n",
+        "plt.xlabel(\"Type of Restaurant\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "hCP_uM8RYtL5"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Conclusion - Majority of the restaurant falls in dinning categorise."
+      ],
+      "metadata": {
+        "id": "MTDY2KPMi8nT"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "group_data=df.groupby('listed_in(type)')['votes'].sum()\n",
+        "result=pd.DataFrame({'votes': group_data})\n",
+        "\n",
+        "plt.plot(result,c=\"green\",marker=\"o\")\n",
+        "plt.xlabel(\"type of restaurant\", color=\"blue\", fontsize=20)\n",
+        "plt.ylabel(\"votes\", color=\"blue\", fontsize=20)\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "WJ3IriOGjQZl"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Conclusion - Dinning restaurant has receiv maximum votes."
+      ],
+      "metadata": {
+        "id": "Kg9ESz5-na47"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.hist(df['rate'],bins=5)\n",
+        "plt.title(\"Rating distribution\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "qTV089ShoME-",
+        "collapsed": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Conclusion - majority resturant receive rating from 3.5 to 4."
+      ],
+      "metadata": {
+        "id": "Wm8411K2p-fO"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#Average order spending by couple"
+      ],
+      "metadata": {
+        "id": "yeAibWbdsXe-"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "couple_data=df['approx_cost(for two people)']\n",
+        "sns.countplot(x=couple_data)\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "8nGWL6gEqK-w"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Conclusion - The majority of couple prefer resturant with an approximate cost of 300 repees."
+      ],
+      "metadata": {
+        "id": "kZmku1n1sWIC"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#Which mode receive maximum rating"
+      ],
+      "metadata": {
+        "id": "rnuKrZg5uxSq"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.figure(figsize=(6,6))\n",
+        "sns.boxplot(x=\"online_order\",y=\"rate\",data=df)\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "JsOLbUqAu3tr"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Conclusion - offline order receive lower rating as compare to online order."
+      ],
+      "metadata": {
+        "id": "KS0rjJicvy9T"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pivot_table=df.pivot_table(index=\"listed_in(type)\",columns=\"online_order\",aggfunc=\"size\",fill_value=0)\n",
+        "\n",
+        "sns.heatmap(pivot_table,annot=True)\n",
+        "plt.title(\"heatmap\")\n",
+        "plt.xlabel(\"online_order\")\n",
+        "plt.ylabel(\"listed_in(type)\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "collapsed": true,
+        "id": "Aauw7Ei_v-Y6"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Conclusion - Dinning restaurant primarily accept offline orders, whereas cafes primarily receive online orders.This suggest that client preference order in a person at resturant,but prefer online ordering in cafes."
+      ],
+      "metadata": {
+        "id": "xlBPuFVszrmw"
+      }
+    }
+  ]
+}
